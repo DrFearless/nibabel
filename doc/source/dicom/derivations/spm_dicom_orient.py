@@ -1,7 +1,5 @@
 ''' Symbolic versions of the DICOM orientation mathemeatics.
-
 Notes on the SPM orientation machinery.
-
 There are symbolic versions of the code in ``spm_dicom_convert``,
 ``write_volume`` subfunction, around line 509 in the version I have
 (SPM8, late 2009 vintage).
@@ -50,12 +48,12 @@ y1[:3,:] = pos_pat_0
 
 to_inv = zeros((4,4))
 to_inv[:,0] = x1
-to_inv[:,1] = symbols('abcd')
+to_inv[:,1] = symbols('a b c d')
 to_inv[0,2] = 1
 to_inv[1,3] = 1
 inv_lhs = zeros((4,4))
 inv_lhs[:,0] = y1
-inv_lhs[:,1] = symbols('efgh')
+inv_lhs[:,1] = symbols('e f g h')
 inv_lhs[:,2:] = R
 
 def spm_full_matrix(x2, y2):
@@ -88,7 +86,7 @@ A_ms = spm_full_matrix(x2_ms, y2_ms)
 # single slice case
 single_aff = eye(4)
 rot = orient
-rot_scale = rot * np.diag(pixel_spacing[:] + [slice_thickness])
+rot_scale = rot * np.diag(pixel_spacing[:] + tuple([slice_thickness]))
 single_aff[:3,:3] = rot_scale
 single_aff[:3,3] = pos_pat_0
 
@@ -144,7 +142,7 @@ print '   L = ' + my_latex(inv_lhs)
 print
 print '   0B = ' + my_latex(one_based)
 print
-print '   ' + my_latex(solved)
+print '   ' + my_latex(solved)+'}'
 print
 print '   A_{multi} = ' + my_latex(multi_aff_solved)
 print '   '
